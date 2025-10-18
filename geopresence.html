@@ -15,7 +15,8 @@
             presentMsgType: { value: "bool" },
             notPresentMsg: { value: "false" },
             notPresentMsgType: { value: "bool" },
-            distance: { value: 1, validate: RED.validators.number() }
+            distance: { value: 1, validate: RED.validators.number() },
+            onlySendOnChange: { value: false }
         },
         inputs: 1,
         outputs: 1,
@@ -52,6 +53,9 @@
                 typeField: $("#node-input-notPresentMsg-type")
             }).typedInput("type", this.notPresentMsgType || "bool")
               .typedInput("value", this.notPresentMsg || "");
+
+            $("#node-input-onlySendOnChange").prop("checked", this.onlySendOnChange);
+
         },
 
         oneditsave: function () {
@@ -66,6 +70,8 @@
 
             this.notPresentMsg = $("#node-input-notPresentMsg").typedInput("value");
             this.notPresentMsgType = $("#node-input-notPresentMsg").typedInput("type");
+
+            this.onlySendOnChange = $("#node-input-onlySendOnChange").prop("checked");
         }
     });
 </script>
@@ -110,6 +116,12 @@
         <label for="node-input-notPresentMsg">Not Present Message</label>
         <input type="text" id="node-input-notPresentMsg">
         <input type="hidden" id="node-input-notPresentMsg-type">
+    </div>
+    <div class="form-row">
+        <label for="node-input-onlySendOnChange">
+            <input type="checkbox" id="node-input-onlySendOnChange" style="display:inline-block; width:auto; vertical-align:top;">
+            Only send when presence changes
+        </label>
     </div>
 </script>
 
