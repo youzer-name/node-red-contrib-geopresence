@@ -95,6 +95,9 @@ module.exports = function (RED) {
                 ? parseTypedInput(config.presentMsgType, config.presentMsg)
                 : parseTypedInput(config.notPresentMsgType, config.notPresentMsg);
 
+            const statusColor = isPresent ? "green" : "gray";
+            const statusText = `${config.location}: ${presenceMsg}`;
+
             if (config.onlySendOnChange) {
                 const lastPresence = node.context().get("lastPresence");
 
@@ -109,8 +112,6 @@ module.exports = function (RED) {
                 node.context().set("lastPresence", isPresent);
             }
 
-            const statusColor = isPresent ? "green" : "gray";
-            const statusText = `${config.location}: ${presenceMsg}`;
             
             node.status({ fill: statusColor, shape: "dot", text: statusText });
 
