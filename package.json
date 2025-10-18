@@ -1,0 +1,21 @@
+{
+  "name": "node-red-contrib-geopresence",
+  "node-red" : {
+	"nodes": {
+    "tessie-server": "geopresence.js"
+		}
+	},
+  "version": "1.0.0",
+    "description": "Calculate presence based on lat/long and distance",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/youzer-name/node-red-contrib-geopresence.git"
+  },
+    "keywords": [
+    "node-red",
+    "home automation",
+    "presence"
+  ],
+  "author": "@youzer-name <youzer-name.sage661@passmail.net>",
+  "license": "MIT"
+}
