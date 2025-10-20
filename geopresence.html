@@ -16,7 +16,8 @@
             notPresentMsg: { value: "false" },
             notPresentMsgType: { value: "bool" },
             distance: { value: 1, validate: RED.validators.number() },
-            onlySendOnChange: { value: false }
+            onlySendOnChange: { value: false },
+            topic: {value: ""}
         },
         inputs: 1,
         outputs: 1,
@@ -118,6 +119,10 @@
         <input type="hidden" id="node-input-notPresentMsg-type">
     </div>
     <div class="form-row">
+        <label for="node-input-topic"> Topic</label>
+        <input type="text" id="node-input-topic" placeholder="leave blank to keep incoming topic">
+    </div>
+    <div class="form-row">
         <label for="node-input-onlySendOnChange">
             <input type="checkbox" id="node-input-onlySendOnChange" style="display:inline-block; width:auto; vertical-align:top;">
             Only send when presence changes
@@ -143,6 +148,7 @@
             </ul>
         </li>
         <li>If not within range, <code>presence</code> will be set to the "Not Present Message" value.</li>
+        <li>Enter a topic to override any inbound message topic.</li>
         <li>All other properties from the original message are preserved.</li>
     </ul>
 </script>

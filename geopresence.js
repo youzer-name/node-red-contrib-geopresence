@@ -122,6 +122,10 @@ module.exports = function (RED) {
                 presence: presenceMsg
             };
 
+            if (config.topic) {
+                newMsg.topic = config.topic;
+            }
+
             send(newMsg);
             if (done) done();
         });
