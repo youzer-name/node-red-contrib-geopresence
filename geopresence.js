@@ -22,8 +22,8 @@ module.exports = function (RED) {
             const dLat = toRad(lat2 - lat1);
             const dLon = toRad(lon2 - lon1);
             const a = Math.sin(dLat / 2) ** 2 +
-                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                      Math.sin(dLon / 2) ** 2;
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                Math.sin(dLon / 2) ** 2;
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c;
         };
@@ -50,20 +50,29 @@ module.exports = function (RED) {
             let checkLat = parseFloat(rawLat);
             let checkLon = parseFloat(rawLon);
 
-            // Only persist msg-based values
-            if (config.checkLatType === "msg") {
-                if (!isNaN(checkLat)) {
-                    node.context().set("lastLat", checkLat);
-                } else {
-                    checkLat = node.context().get("lastLat");
-                }
-            }
+            const hasLat = !isNaN(checkLat);
+            const hasLon = !isNaN(checkLon);
 
-            if (config.checkLonType === "msg") {
-                if (!isNaN(checkLon)) {
+            if (config.checkLatType === "msg" && config.checkLonType === "msg") {
+                if (hasLat && hasLon) {
+                    // Full coordinate set — treat as atomic
+                    node.context().set("lastLat", checkLat);
                     node.context().set("lastLon", checkLon);
                 } else {
-                    checkLon = node.context().get("lastLon");
+                    // Partial — fallback to persisted values
+                    if (!hasLat) checkLat = node.context().get("lastLat");
+                    if (!hasLon) checkLon = node.context().get("lastLon");
+                }
+            } else {
+                // For flow/global, do NOT use persisted values
+                if (config.checkLatType !== "msg" && !hasLat) {
+                    node.status({ fill: "red", shape: "ring", text: "flow/global lat missing or invalid" });
+                    return;
+                }
+
+                if (config.checkLonType !== "msg" && !hasLon) {
+                    node.status({ fill: "red", shape: "ring", text: "flow/global lon missing or invalid" });
+                    return;
                 }
             }
 
@@ -112,7 +121,7 @@ module.exports = function (RED) {
                 node.context().set("lastPresence", isPresent);
             }
 
-            
+
             node.status({ fill: statusColor, shape: "dot", text: statusText });
 
             const newMsg = RED.util.cloneMessage(msg);
